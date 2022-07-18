@@ -9,7 +9,7 @@ export const Snake = new class {
 	}
 
 	reset() {
-		this.cell = new Vec(CELL_COUNT / 2, CELL_COUNT / 2);
+		this.cell = new Vec(Math.floor(CELL_COUNT / 2));
 		this.dir = new Vec(0, 0);
 		this.color = 'white';
 		this.total = 1

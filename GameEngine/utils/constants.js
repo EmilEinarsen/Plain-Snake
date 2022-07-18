@@ -13,6 +13,6 @@ export const GRID_LINE_COLOR = '#232332'
 export const FPS = 120
 export const SNAKE_MOVE_DELAY = 10
 export const BOARD_SIZE = 400
-export const CELL_COUNT = 20
+export const CELL_COUNT = 21
 export const CELL_SIZE  = BOARD_SIZE / CELL_COUNT
 export const PARTICLE_POOL_SIZE = 20

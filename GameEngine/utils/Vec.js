@@ -1,7 +1,7 @@
 export class Vec {
 	constructor(x, y) {
 		this.x = x;
-		this.y = y;
+		this.y = y??x;
 	}
 	add(v) {
 		this.x += v.x;
