@@ -99,6 +99,7 @@ export const GameEngine = new class {
 		this.score = '00';
 		Snake.reset()
 		Food.spawn();
+		ParticlePool.reset()
 		KEY.resetState();
 		this.isGameOver = false;
 		clearTimeout(this.requestID);

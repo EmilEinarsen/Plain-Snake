@@ -23,4 +23,8 @@ export const ParticlePool = new class {
 	draw() {
 		this.particles.forEach(p => p.draw(this.engine.ctx))
 	}
+
+	reset() {
+		this.particles.forEach(p => p.reset())
+	}
 }()

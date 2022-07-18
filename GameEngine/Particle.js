@@ -29,4 +29,11 @@ export class Particle {
     this.pos.add(this.vel);
     this.vel.y -= this.gravity;
   }
+
+	reset() {
+		this.pos = undefined
+		this.color = undefined
+		this.vel = undefined
+		this.size = undefined
+	}
 }
