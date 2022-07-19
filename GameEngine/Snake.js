@@ -100,8 +100,6 @@ export const Snake = new class {
   }
 
   update() {
-    this.walls();
-    this.controlls();
     if (!this.delay--) {
 			this.history[this.length - 1] = Vec.clone(this.cell)
       for (let i = 0; i < this.length - 1; i++) {
@@ -119,5 +117,7 @@ export const Snake = new class {
       this.selfCollision()
 			this.history.length && this.randomlyBlink()
     }
+    this.walls();
+    this.controlls();
   }
 }()
