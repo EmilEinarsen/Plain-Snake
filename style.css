@@ -17,6 +17,7 @@ html, body {
   height: 100%;
   font-family: "Poppins", sans-serif;
   color: #6e7888;
+	overflow: hidden;
 }
 
 body {
@@ -27,9 +28,9 @@ body {
 }
 
 canvas {
-  background-color: #181825;
-	width: 400px;
-	height: 400px;
+	width: 600px;
+	height: 600px;
+	margin: -100px;
 }
 
 .container {
@@ -55,6 +56,7 @@ h1 {
   font-weight: 600;
   color: inherit;
   text-transform: uppercase;
+	letter-spacing: .5ch;
 }
 
 .score {

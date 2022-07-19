@@ -1,4 +1,4 @@
-import { BOARD_SIZE, GRID_LINE_COLOR, CELL_COUNT, GAME_OVER_TEXT_COLOR, GAME_OVER_TITLE_FONT, GAME_OVER_SUBTITLE_FONT, FPS } from "./utils/constants.js"
+import { BOARD_SIZE, GRID_LINE_COLOR, CELL_COUNT, GAME_OVER_TEXT_COLOR, GAME_OVER_TITLE_FONT, GAME_OVER_SUBTITLE_FONT, FPS, ENGINE_BLINK_ODDS, ENGINE_BLINK_DURATION, CANVAS_SIZE } from "./utils/constants.js"
 import { Food } from "./Food.js"
 import { ParticlePool } from "./ParticlePool.js"
 import { Snake } from "./Snake.js"
@@ -7,18 +7,26 @@ import { KEY } from "./utils/utils.js"
 export const GameEngine = new class {
 	canvas = document.querySelector('canvas');
 
-	width = this.canvas.width = BOARD_SIZE
-	height = this.canvas.height = BOARD_SIZE
+	width = BOARD_SIZE
+	height = BOARD_SIZE
+	offset = (CANVAS_SIZE - BOARD_SIZE) / 2
 	ctx = (() => {
 		const ctx = this.canvas.getContext('2d')
+		this.canvas.width = this.canvas.style.width = CANVAS_SIZE
+		this.canvas.height = this.canvas.style.height = CANVAS_SIZE
 		ctx.imageSmoothingEnabled = false;
 		return ctx
-	})() 
+	})()
 
-	isGameOver = false
-  currentHue = undefined
+	isGameOver
+  currentHue
   maxScore = window.localStorage.getItem('maxScore') || undefined
   requestID
+	sendScoreChange
+
+	onScoreChange(fn) {
+		this.sendScoreChange = fn
+	}
 	
 	#_score = 0
 	get score() {
@@ -54,12 +62,12 @@ export const GameEngine = new class {
 		}
 	}
 
-	game() {
+	game(skipDraw = false) {
 		Snake.update();
 		ParticlePool.update()
 
+		if(skipDraw) return
 		this.drawGrid();
-		
 		Snake.draw();
 		Food.draw();
 		ParticlePool.draw()
@@ -84,11 +92,21 @@ export const GameEngine = new class {
 	}
 
 	gameLoop() {
-		const tick = () => {
+		let prev
+		const tick = now => {
 			this.requestID = setTimeout(() => {
 				requestAnimationFrame(tick);
-				this.ctx.clearRect(0, 0, this.width, this.height);
-				if (!this.isGameOver) this.game() 
+				this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+				this.ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
+				this.ctx.translate(this.offset, this.offset)
+				this.ctx.fillStyle = '#181825'
+				this.ctx.fillRect(0, 0, this.width, this.height);
+
+				if(!prev && (Math.random() < ENGINE_BLINK_ODDS)) {
+					prev = performance.now()
+				} else if(ENGINE_BLINK_DURATION < (now - prev)) prev = undefined
+				
+				if (!this.isGameOver) this.game(!!prev) 
 				else this.gameOver()
 			}, 1000 / FPS)
 		}
@@ -105,10 +123,5 @@ export const GameEngine = new class {
 		clearTimeout(this.requestID);
 		KEY.listen();
 		this.gameLoop();
-	}
-
-	sendScoreChange
-	onScoreChange(fn) {
-		this.sendScoreChange = fn
 	}
 }()
