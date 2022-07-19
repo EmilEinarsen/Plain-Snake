@@ -8,8 +8,6 @@ export const GAME_OVER_TEXT_COLOR = '#4cffd7'
 export const GAME_OVER_TITLE_FONT = getFontString({ fontWeight: 'bold', fontSize: '2rem' })
 export const GAME_OVER_SUBTITLE_FONT = getFontString()
 
-export const GRID_LINE_COLOR = '#232332'
-
 /**
  * Controls the application framerate. 
  * Should be coordinated with `SNAKE_MOVE_DELAY`
@@ -37,3 +35,18 @@ export const CELL_SIZE  = BOARD_SIZE / CELL_COUNT
  * Number of particles used/recycled withing the ParticlePool
  */
 export const PARTICLE_POOL_SIZE = 20
+
+
+export const GRID_LINE_COLOR = '#232332'
+
+/* SNAKE */
+export const SNAKE_HEAD_COLOR = 'rgba(225, 225, 225, 1)'
+export const SNAKE_EYE_SIZE = CELL_SIZE/5
+export const SNAKE_EYE_DISTANCE_FROM_SIDE = 2
+export const SNAKE_EYE_DISTANCE_FROM_MIDDLE = 0
+export const SNAKE_EYE_COLOR = 'rgba(0, 0, 0, 1)'
+export const SNAKE_EYE_COLOR_BLINK = 'rgba(0, 0, 0, .2)'
+export const SNAKE_EYE_BLINK_ODDS_SINGLE = .01
+export const SNAKE_EYE_BLINK_ODDS_PAIR = .05
+export const SNAKE_BODY_COLOR = 'rgba(225, 225, 225, 1)'
+export const SNAKE_SHADOW_COLOR = 'rgba(255, 255, 255, .3)'
