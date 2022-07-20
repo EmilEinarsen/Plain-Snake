@@ -44,13 +44,18 @@ export const GameEngine = new class {
 		this.reset()
 	}
 
+	resetContext() {
+		this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+		this.ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
+	}
+
 	drawGrid() {
 		this.ctx.lineWidth = 1.1;
 		this.ctx.strokeStyle = GRID_LINE_COLOR;
 		this.ctx.shadowBlur = 0;
+		this.ctx.beginPath();
 		for (let i = 1; i < CELL_COUNT; i++) {
 			const f = (this.width / CELL_COUNT) * i;
-			this.ctx.beginPath();
 			this.ctx.moveTo(f, 0);
 			this.ctx.lineTo(f, this.height);
 			this.ctx.stroke();
@@ -58,8 +63,27 @@ export const GameEngine = new class {
 			this.ctx.moveTo(0, f);
 			this.ctx.lineTo(this.width, f);
 			this.ctx.stroke();
-			this.ctx.closePath();
 		}
+		this.ctx.closePath();
+	}
+
+	drawBackground() {
+		this.ctx.fillStyle = '#181825'
+		this.ctx.fillRect(0, 0, this.width, this.height);
+
+		this.ctx.save()
+		this.ctx.beginPath();
+		this.ctx.rect(0, 0, this.width, this.height);
+		this.ctx.clip();
+
+		// set shadowing
+		this.ctx.shadowColor = 'white';
+		this.ctx.shadowBlur = 50;
+		this.ctx.shadowOffsetX = 2;
+		this.ctx.shadowOffsetY = -2;
+		this.ctx.strokeRect(0, 0, this.width, this.height);
+		this.ctx.closePath();
+		this.ctx.restore()
 	}
 
 	game(skipDraw = false) {
@@ -96,11 +120,9 @@ export const GameEngine = new class {
 		const tick = now => {
 			this.requestID = setTimeout(() => {
 				requestAnimationFrame(tick);
-				this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-				this.ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
+				this.resetContext();
 				this.ctx.translate(this.offset, this.offset)
-				this.ctx.fillStyle = '#181825'
-				this.ctx.fillRect(0, 0, this.width, this.height);
+				this.drawBackground();
 
 				if(!prev && (Math.random() < ENGINE_BLINK_ODDS)) {
 					prev = performance.now()
