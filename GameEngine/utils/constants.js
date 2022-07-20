@@ -54,13 +54,28 @@ export const GRID_LINE_COLOR = '#232332'
  * "move one cell every X"
  */
 export const SNAKE_MOVE_DELAY = 10
-export const SNAKE_HEAD_COLOR = 'rgba(225, 225, 225, 1)'
+export let SNAKE_HEAD_COLOR = ''
 export const SNAKE_EYE_SIZE = CELL_SIZE/5
 export const SNAKE_EYE_DISTANCE_FROM_SIDE = 2
 export const SNAKE_EYE_DISTANCE_FROM_MIDDLE = 0
-export const SNAKE_EYE_COLOR = 'rgba(0, 0, 0, 1)'
-export const SNAKE_EYE_COLOR_BLINK = 'rgba(0, 0, 0, .2)'
+export let SNAKE_EYE_COLOR = ''
+export let SNAKE_EYE_COLOR_BLINK = ''
 export const SNAKE_EYE_BLINK_ODDS_SINGLE = .01
 export const SNAKE_EYE_BLINK_ODDS_PAIR = .05
-export const SNAKE_BODY_COLOR = 'rgba(225, 225, 225, 1)'
-export const SNAKE_SHADOW_COLOR = 'rgba(255, 255, 255, .3)'
+export let SNAKE_BODY_COLOR = ''
+export let SNAKE_SHADOW_COLOR = ''
+
+document.addEventListener('DOMContentLoaded', () => {
+	const getVar = n => getComputedStyle(document.documentElement).getPropertyValue(n)
+
+	const observeCSSVariables = () => {
+		SNAKE_HEAD_COLOR = getVar('--snake-head-color')
+		SNAKE_EYE_COLOR = getVar('--snake-eye-color')
+		SNAKE_EYE_COLOR_BLINK = getVar('--snake-eye-color-blink')
+		SNAKE_BODY_COLOR = getVar('--snake-body-color')
+		SNAKE_SHADOW_COLOR = getVar('--snake-shadow-color')
+	}
+	observeCSSVariables()
+
+	setInterval(observeCSSVariables, 1000)
+})

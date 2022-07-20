@@ -27,6 +27,14 @@ body {
   color: #6e7888;
 }
 
+:root {
+	--snake-head-color: white;
+	--snake-eye-color: #424242;
+	--snake-eye-color-blink: #eee;
+	--snake-body-color: #eee;
+	--snake-shadow-color: #eeeeee30;
+}
+
 canvas {
 	position: relative;
 	z-index: 3;

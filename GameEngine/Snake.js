@@ -24,7 +24,6 @@ export const Snake = new class {
 	reset() {
 		this.cell = new Vec(Math.floor(CELL_COUNT / 2));
 		this.dir = new Vec(0, 0);
-		this.color = SNAKE_HEAD_COLOR;
 		this.length = 1
 		this.history = []
 		this.delay = SNAKE_MOVE_DELAY
@@ -64,12 +63,10 @@ export const Snake = new class {
 
   draw() {
     this.engine.ctx.save()
-		this.engine.ctx.fillStyle = this.color;
+		this.engine.ctx.fillStyle = SNAKE_HEAD_COLOR;
     this.engine.ctx.shadowBlur = 20;
     this.engine.ctx.shadowColor = SNAKE_SHADOW_COLOR;
     this.engine.ctx.fillRect(this.cell.x * CELL_SIZE, this.cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-		this.drawEyes()
-    this.engine.ctx.shadowBlur = 0;
 		this.engine.ctx.lineWidth = 1;
 		this.engine.ctx.fillStyle = SNAKE_BODY_COLOR;
     if (1 < this.length)
@@ -77,6 +74,7 @@ export const Snake = new class {
         this.engine.ctx.fillRect(entry.x * CELL_SIZE, entry.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
       )
 		this.engine.ctx.restore()
+		this.drawEyes()
   }
 
   walls() {
