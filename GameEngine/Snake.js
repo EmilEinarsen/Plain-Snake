@@ -104,6 +104,7 @@ export const Snake = new class {
         this.history[i] = this.history[i + 1];
       }
       this.cell.add(this.dir);
+			this.walls();
 			
       if (isCollision(this.cell, Food.cell)) {
 				Food.eaten()
@@ -115,7 +116,6 @@ export const Snake = new class {
       this.selfCollision()
 			this.history.length && this.randomlyBlink()
     }
-    this.walls();
     this.controlls();
   }
 }()
