@@ -98,7 +98,7 @@ export const GameEngine = new class {
 	}
 	
 	gameOver(skipDraw = false) {
-		if(this.maxScore || this.maxScore < this.score) {
+		if(!this.maxScore || this.maxScore < this.score) {
 			this.maxScore = this.score
 			window.localStorage.setItem('maxScore', this.maxScore)
 		}
