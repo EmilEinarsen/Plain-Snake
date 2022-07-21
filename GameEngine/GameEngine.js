@@ -1,4 +1,4 @@
-import { BOARD_SIZE, GRID_LINE_COLOR, CELL_COUNT, GAME_OVER_TEXT_COLOR, GAME_OVER_TITLE_FONT, GAME_OVER_SUBTITLE_FONT, FPS, ENGINE_BLINK_ODDS, ENGINE_BLINK_DURATION, CANVAS_SIZE } from "./utils/constants.js"
+import { BOARD_SIZE, GRID_LINE_COLOR, CELL_COUNT, GAME_OVER_TEXT_COLOR, GAME_OVER_TITLE_FONT, GAME_OVER_SUBTITLE_FONT, FPS, BOARD_BLINK_ODDS, BOARD_BLINK_DURATION, CANVAS_SIZE, BOARD_BLINK_ODDS_GAME_OVER, BOARD_BLINK_DURATION_GAME_OVER } from "./utils/constants.js"
 import { Food } from "./Food.js"
 import { ParticlePool } from "./ParticlePool.js"
 import { Snake } from "./Snake.js"
@@ -97,11 +97,13 @@ export const GameEngine = new class {
 		ParticlePool.draw()
 	}
 	
-	gameOver() {
-		clearTimeout(this.requestID)
+	gameOver(skipDraw = false) {
+		if(this.maxScore || this.maxScore < this.score) {
+			this.maxScore = this.score
+			window.localStorage.setItem('maxScore', this.maxScore);
+		}
 
-		this.maxScore = !this.maxScore || this.maxScore < this.score ? this.score : this.maxScore
-		window.localStorage.setItem('maxScore', this.maxScore);
+		if(skipDraw) return
 
 		this.ctx.fillStyle = GAME_OVER_TEXT_COLOR;
 		this.ctx.textAlign = 'center';
@@ -115,6 +117,12 @@ export const GameEngine = new class {
 		this.ctx.fillText(`MAXSCORE   ${this.maxScore}`, this.width / 2, this.height / 2 + 80);
 	}
 
+	get BLINK_ODDS() {
+		return this.isGameOver ? BOARD_BLINK_ODDS_GAME_OVER : BOARD_BLINK_ODDS
+	}
+	get BLINK_DURATION() {
+		return this.isGameOver ? BOARD_BLINK_DURATION_GAME_OVER : BOARD_BLINK_DURATION
+	}
 	gameLoop() {
 		let prev
 		const tick = now => {
@@ -124,12 +132,12 @@ export const GameEngine = new class {
 				this.ctx.translate(this.offset, this.offset)
 				this.drawBackground();
 
-				if(!prev && (Math.random() < ENGINE_BLINK_ODDS)) {
+				if(!prev && (Math.random() < this.BLINK_ODDS)) {
 					prev = performance.now()
-				} else if(ENGINE_BLINK_DURATION < (now - prev)) prev = undefined
+				} else if(this.BLINK_DURATION < (now - prev)) prev = undefined
 				
 				if (!this.isGameOver) this.game(!!prev) 
-				else this.gameOver()
+				else this.gameOver(!!prev)
 			}, 1000 / FPS)
 		}
 		tick()
@@ -141,7 +149,7 @@ export const GameEngine = new class {
 		Food.spawn();
 		ParticlePool.reset()
 		KEY.resetState();
-		this.isGameOver = false;
+		this.isGameOver = false
 		clearTimeout(this.requestID);
 		KEY.listen();
 		this.gameLoop();

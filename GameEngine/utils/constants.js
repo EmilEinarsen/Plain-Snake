@@ -39,11 +39,20 @@ export const PARTICLE_POOL_SIZE = 30
 /**
  * Odds of the game-play not to render, causing blinking 
  */
-export const ENGINE_BLINK_ODDS = .0025
+export const BOARD_BLINK_ODDS = .0025
 /**
  * Duration of the game-play blinking in ms
  */
-export const ENGINE_BLINK_DURATION = 10
+ export const BOARD_BLINK_DURATION = 10
+/**
+ * Odds of the game-play not to render, causing blinking 
+ */
+export const BOARD_BLINK_ODDS_GAME_OVER = .0025
+/**
+ * Duration of the game-play blinking in ms
+ */
+ export const BOARD_BLINK_DURATION_GAME_OVER = 100
+
 
 
 export const GRID_LINE_COLOR = '#232332'
