@@ -1,7 +1,8 @@
 import { CELL_COUNT, CELL_SIZE, SNAKE_BODY_COLOR, SNAKE_EYE_BLINK_ODDS_PAIR, SNAKE_EYE_BLINK_ODDS_SINGLE, SNAKE_EYE_COLOR, SNAKE_EYE_COLOR_BLINK, SNAKE_EYE_DISTANCE_FROM_MIDDLE, SNAKE_EYE_DISTANCE_FROM_SIDE, SNAKE_EYE_SIZE, SNAKE_HEAD_COLOR, SNAKE_MOVE_DELAY, SNAKE_SHADOW_COLOR } from "./utils/constants.js"
 import { Food } from "./Food.js"
 import { Vec } from "./utils/Vec.js"
-import { isCollision, KEY } from "./utils/utils.js"
+import { isCollision } from "./utils/utils.js"
+import { Controller } from "./Controller.js"
 
 export const Snake = new class {
 	eyes = [
@@ -85,37 +86,44 @@ export const Snake = new class {
   }
 
   controlls() {
-    if (KEY.ArrowUp) this.dir = new Vec(0, -1)
-    if (KEY.ArrowDown) this.dir = new Vec(0, 1)
-    if (KEY.ArrowLeft) this.dir = new Vec(-1, 0)
-    if (KEY.ArrowRight) this.dir = new Vec(1, 0)
+		let prevDir = this.dir.clone()
+    const newDir = 
+			Controller.input.ArrowUp ? new Vec(0, -1)
+			: Controller.input.ArrowDown ? new Vec(0, 1)
+			: Controller.input.ArrowLeft ? new Vec(-1, 0)
+			: Controller.input.ArrowRight ? new Vec(1, 0)
+			: undefined
+		const isReversedDir = !!newDir && prevDir.mult(-1).equal(newDir)
+		if(!newDir || isReversedDir) return
+		this.dir = newDir
   }
 
   selfCollision() {
-    3 < this.length && this.history.forEach(entry => {
+    1 < this.length && this.history.forEach(entry => {
 			this.engine.isGameOver ||= isCollision(this.cell, entry)
 		})
   }
 
   update() {
-    if (!this.delay--) {
-			this.history[this.length - 1] = Vec.clone(this.cell)
-      for (let i = 0; i < this.length - 1; i++) {
-        this.history[i] = this.history[i + 1]
-      }
-      this.cell.add(this.dir)
-			this.walls()
-			
-      if (isCollision(this.cell, Food.cell)) {
-				Food.eaten()
-				this.length++
-				this.engine.score++
-			}
-			
-      this.delay = SNAKE_MOVE_DELAY
-      this.selfCollision()
-			this.history.length && this.randomlyBlink()
-    }
-    this.controlls()
+    if (this.delay--) return
+		this.controlls()
+
+		this.history[this.length - 1] = Vec.clone(this.cell)
+		for (let i = 0; i < this.length - 1; i++) {
+			this.history[i] = this.history[i + 1]
+		}
+
+		this.cell.add(this.dir)
+		this.walls()
+		
+		if (isCollision(this.cell, Food.cell)) {
+			Food.eaten()
+			this.length++
+			this.engine.score++
+		}
+		this.selfCollision()
+		
+		this.delay = SNAKE_MOVE_DELAY
+		this.history.length && this.randomlyBlink()
   }
 }()

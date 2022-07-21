@@ -2,7 +2,7 @@ import { BOARD_SIZE, GRID_LINE_COLOR, CELL_COUNT, GAME_OVER_TEXT_COLOR, GAME_OVE
 import { Food } from "./Food.js"
 import { ParticlePool } from "./ParticlePool.js"
 import { Snake } from "./Snake.js"
-import { KEY } from "./utils/utils.js"
+import { Controller } from "./Controller.js"
 
 export const GameEngine = new class {
 	canvas = document.querySelector('canvas')
@@ -144,14 +144,16 @@ export const GameEngine = new class {
 	}
 	
 	reset = () => {
+		clearTimeout(this.requestID)
+
+		this.isGameOver = false
 		this.score = '00'
+
 		Snake.reset()
 		Food.spawn()
 		ParticlePool.reset()
-		KEY.resetState()
-		this.isGameOver = false
-		clearTimeout(this.requestID)
-		KEY.listen()
+		Controller.reset()
+
 		this.gameLoop()
 	}
 }()
