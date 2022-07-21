@@ -18,7 +18,7 @@ export const Food = new class {
 
 	spawn() {
 		this.engine.currentHue = `hsl(${~~(Math.random() * 360)}, 100%, 50%)`
-    this.cell = this.getEmptyCell()
+		this.cell = this.getEmptyCell()
 	}
 
 	getEmptyCell() {
@@ -29,14 +29,14 @@ export const Food = new class {
 		return [...Snake.history, Snake.cell].every(entry => !isCollision(cell, entry)) && cell || this.getEmptyCell()
 	}
 
-  draw() {
+	draw() {
 		const ctx = this.engine.ctx
-    ctx.save()
+		ctx.save()
 		ctx.globalCompositeOperation = 'lighter'
-    ctx.shadowBlur = 20
-    ctx.shadowColor = this.engine.currentHue
-    ctx.fillStyle = this.engine.currentHue
-    ctx.fillRect(this.cell.x * CELL_SIZE, this.cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+		ctx.shadowBlur = 20
+		ctx.shadowColor = this.engine.currentHue
+		ctx.fillStyle = this.engine.currentHue
+		ctx.fillRect(this.cell.x * CELL_SIZE, this.cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
 		ctx.restore()
-  }
+	}
 }()

@@ -2,8 +2,8 @@ import { DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE, WINDOWS_EMOJI_FALLBACK_FONT } f
 
 export const getFontString = ({
 	fontWeight = '',
-  fontSize = DEFAULT_FONT_SIZE,
-  fontFamily = DEFAULT_FONT_FAMILY
+	fontSize = DEFAULT_FONT_SIZE,
+	fontFamily = DEFAULT_FONT_FAMILY
 } = {}) => `${fontWeight} ${fontSize} ${fontFamily}, ${WINDOWS_EMOJI_FALLBACK_FONT}`.trim()
 
 export const isCollision = (v1, v2) => v1.x === v2.x && v1.y === v2.y

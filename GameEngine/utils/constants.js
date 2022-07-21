@@ -31,7 +31,7 @@ if(!(CELL_COUNT % 2)) throw Error("Didn't you read the comment?")
 /**
  * Size of each cell
  */
-export const CELL_SIZE  = BOARD_SIZE / CELL_COUNT
+export const CELL_SIZE	= BOARD_SIZE / CELL_COUNT
 /**
  * Number of particles used/recycled withing the ParticlePool
  */

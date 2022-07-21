@@ -19,9 +19,9 @@ export const GameEngine = new class {
 	})()
 
 	isGameOver
-  currentHue
-  maxScore = window.localStorage.getItem('maxScore') || undefined
-  requestID
+	currentHue
+	maxScore = window.localStorage.getItem('maxScore') || undefined
+	requestID
 	sendScoreChange
 
 	onScoreChange(fn) {
@@ -113,8 +113,8 @@ export const GameEngine = new class {
 		this.ctx.fillText('GAME OVER', this.width / 2, this.height / 2 - 40)
 
 		this.ctx.font = GAME_OVER_SUBTITLE_FONT
-		this.ctx.fillText(`SCORE   ${this.score}`, this.width / 2, this.height / 2 + 60)
-		this.ctx.fillText(`MAXSCORE   ${this.maxScore}`, this.width / 2, this.height / 2 + 80)
+		this.ctx.fillText(`SCORE	 ${this.score}`, this.width / 2, this.height / 2 + 60)
+		this.ctx.fillText(`MAXSCORE	 ${this.maxScore}`, this.width / 2, this.height / 2 + 80)
 	}
 
 	get BLINK_ODDS() {
