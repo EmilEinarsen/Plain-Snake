@@ -20,6 +20,7 @@ export const Snake = new class {
 
 	constructor() {
 		this.reset()
+		document.addEventListener('click', this.blinkOccasionally)
 	}
 
 	reset() {
@@ -34,11 +35,11 @@ export const Snake = new class {
 		this.engine = engine
 	}
 
-	randomlyBlink() {
+	blinkOccasionally = blink => {
 		const n = Math.random()
 		let singleBlinkBase = SNAKE_EYE_BLINK_ODDS_PAIR
 		this.eyes.forEach(eye => {
-			const shouldBlink = (
+			const shouldBlink = blink ?? (
 				n <= SNAKE_EYE_BLINK_ODDS_PAIR || (
 					singleBlinkBase <= n && 
 					n < (singleBlinkBase += SNAKE_EYE_BLINK_ODDS_SINGLE)
@@ -87,7 +88,7 @@ export const Snake = new class {
 
   controlls() {
 		let prevDir = this.dir.clone()
-    const newDir = 
+		const newDir = 
 			Controller.input.ArrowUp ? new Vec(0, -1)
 			: Controller.input.ArrowDown ? new Vec(0, 1)
 			: Controller.input.ArrowLeft ? new Vec(-1, 0)
@@ -107,7 +108,6 @@ export const Snake = new class {
   update() {
     if (this.delay--) return
 		this.controlls()
-
 		this.history[this.length - 1] = Vec.clone(this.cell)
 		for (let i = 0; i < this.length - 1; i++) {
 			this.history[i] = this.history[i + 1]
@@ -124,6 +124,6 @@ export const Snake = new class {
 		this.selfCollision()
 		
 		this.delay = SNAKE_MOVE_DELAY
-		this.history.length && this.randomlyBlink()
+		this.blinkOccasionally()
   }
 }()
