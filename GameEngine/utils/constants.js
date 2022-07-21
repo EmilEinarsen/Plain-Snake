@@ -23,7 +23,7 @@ export const CANVAS_SIZE = 600
  */
 export const BOARD_SIZE = 400
 /**
- * Impacts the number of cells in a row/column (R = C; RxC)
+ * Impacts the number of cells in a row/column (R = C RxC)
  * Should be an odd number so that the Snake is positioned in the middle
  */
 export const CELL_COUNT = 21

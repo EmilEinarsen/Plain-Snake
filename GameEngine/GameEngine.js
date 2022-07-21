@@ -5,7 +5,7 @@ import { Snake } from "./Snake.js"
 import { KEY } from "./utils/utils.js"
 
 export const GameEngine = new class {
-	canvas = document.querySelector('canvas');
+	canvas = document.querySelector('canvas')
 
 	width = BOARD_SIZE
 	height = BOARD_SIZE
@@ -14,7 +14,7 @@ export const GameEngine = new class {
 		const ctx = this.canvas.getContext('2d')
 		this.canvas.width = this.canvas.style.width = CANVAS_SIZE
 		this.canvas.height = this.canvas.style.height = CANVAS_SIZE
-		ctx.imageSmoothingEnabled = false;
+		ctx.imageSmoothingEnabled = false
 		return ctx
 	})()
 
@@ -45,76 +45,76 @@ export const GameEngine = new class {
 	}
 
 	resetContext() {
-		this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+		this.ctx.setTransform(1, 0, 0, 1, 0, 0)
 		this.ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
 	}
 
 	drawGrid() {
-		this.ctx.lineWidth = 1.1;
-		this.ctx.strokeStyle = GRID_LINE_COLOR;
-		this.ctx.shadowBlur = 0;
-		this.ctx.beginPath();
+		this.ctx.lineWidth = 1.1
+		this.ctx.strokeStyle = GRID_LINE_COLOR
+		this.ctx.shadowBlur = 0
+		this.ctx.beginPath()
 		for (let i = 1; i < CELL_COUNT; i++) {
-			const f = (this.width / CELL_COUNT) * i;
-			this.ctx.moveTo(f, 0);
-			this.ctx.lineTo(f, this.height);
-			this.ctx.stroke();
-			this.ctx.beginPath();
-			this.ctx.moveTo(0, f);
-			this.ctx.lineTo(this.width, f);
-			this.ctx.stroke();
+			const f = (this.width / CELL_COUNT) * i
+			this.ctx.moveTo(f, 0)
+			this.ctx.lineTo(f, this.height)
+			this.ctx.stroke()
+			this.ctx.beginPath()
+			this.ctx.moveTo(0, f)
+			this.ctx.lineTo(this.width, f)
+			this.ctx.stroke()
 		}
-		this.ctx.closePath();
+		this.ctx.closePath()
 	}
 
 	drawBackground() {
 		this.ctx.fillStyle = '#181825'
-		this.ctx.fillRect(0, 0, this.width, this.height);
+		this.ctx.fillRect(0, 0, this.width, this.height)
 
 		this.ctx.save()
-		this.ctx.beginPath();
-		this.ctx.rect(0, 0, this.width, this.height);
-		this.ctx.clip();
+		this.ctx.beginPath()
+		this.ctx.rect(0, 0, this.width, this.height)
+		this.ctx.clip()
 
 		// set shadowing
-		this.ctx.shadowColor = 'white';
-		this.ctx.shadowBlur = 50;
-		this.ctx.shadowOffsetX = 2;
-		this.ctx.shadowOffsetY = -2;
-		this.ctx.strokeRect(0, 0, this.width, this.height);
-		this.ctx.closePath();
+		this.ctx.shadowColor = 'white'
+		this.ctx.shadowBlur = 50
+		this.ctx.shadowOffsetX = 2
+		this.ctx.shadowOffsetY = -2
+		this.ctx.strokeRect(0, 0, this.width, this.height)
+		this.ctx.closePath()
 		this.ctx.restore()
 	}
 
 	game(skipDraw = false) {
-		Snake.update();
+		Snake.update()
 		ParticlePool.update()
 
 		if(skipDraw) return
-		this.drawGrid();
-		Snake.draw();
-		Food.draw();
+		this.drawGrid()
+		Snake.draw()
+		Food.draw()
 		ParticlePool.draw()
 	}
 	
 	gameOver(skipDraw = false) {
 		if(this.maxScore || this.maxScore < this.score) {
 			this.maxScore = this.score
-			window.localStorage.setItem('maxScore', this.maxScore);
+			window.localStorage.setItem('maxScore', this.maxScore)
 		}
 
 		if(skipDraw) return
 
-		this.ctx.fillStyle = GAME_OVER_TEXT_COLOR;
-		this.ctx.textAlign = 'center';
+		this.ctx.fillStyle = GAME_OVER_TEXT_COLOR
+		this.ctx.textAlign = 'center'
 		this.ctx.textBaseline = 'bottom'
 
-		this.ctx.font = GAME_OVER_TITLE_FONT;
-		this.ctx.fillText('GAME OVER', this.width / 2, this.height / 2 - 40);
+		this.ctx.font = GAME_OVER_TITLE_FONT
+		this.ctx.fillText('GAME OVER', this.width / 2, this.height / 2 - 40)
 
 		this.ctx.font = GAME_OVER_SUBTITLE_FONT
-		this.ctx.fillText(`SCORE   ${this.score}`, this.width / 2, this.height / 2 + 60);
-		this.ctx.fillText(`MAXSCORE   ${this.maxScore}`, this.width / 2, this.height / 2 + 80);
+		this.ctx.fillText(`SCORE   ${this.score}`, this.width / 2, this.height / 2 + 60)
+		this.ctx.fillText(`MAXSCORE   ${this.maxScore}`, this.width / 2, this.height / 2 + 80)
 	}
 
 	get BLINK_ODDS() {
@@ -127,10 +127,10 @@ export const GameEngine = new class {
 		let prev
 		const tick = now => {
 			this.requestID = setTimeout(() => {
-				requestAnimationFrame(tick);
-				this.resetContext();
+				requestAnimationFrame(tick)
+				this.resetContext()
 				this.ctx.translate(this.offset, this.offset)
-				this.drawBackground();
+				this.drawBackground()
 
 				if(!prev && (Math.random() < this.BLINK_ODDS)) {
 					prev = performance.now()
@@ -144,14 +144,14 @@ export const GameEngine = new class {
 	}
 	
 	reset = () => {
-		this.score = '00';
+		this.score = '00'
 		Snake.reset()
-		Food.spawn();
+		Food.spawn()
 		ParticlePool.reset()
-		KEY.resetState();
+		KEY.resetState()
 		this.isGameOver = false
-		clearTimeout(this.requestID);
-		KEY.listen();
-		this.gameLoop();
+		clearTimeout(this.requestID)
+		KEY.listen()
+		this.gameLoop()
 	}
 }()
