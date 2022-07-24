@@ -1,3 +1,4 @@
+import { scoreEvent } from "./events/scoreEvent.js"
 import { ParticlePool } from "./ParticlePool.js"
 import { Snake } from "./Snake.js"
 import { CELL_COUNT, CELL_SIZE } from "./utils/constants.js"
@@ -13,6 +14,7 @@ export const Food = new class {
 
 	eaten() {
 		ParticlePool.create(Vec.clone(this.cell).mult(CELL_SIZE))
+		scoreEvent.dispatch()
 		this.spawn()
 	}
 

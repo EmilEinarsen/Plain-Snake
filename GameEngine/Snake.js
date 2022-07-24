@@ -2,7 +2,7 @@ import { CELL_COUNT, CELL_SIZE, SNAKE_BODY_COLOR, SNAKE_EYE_BLINK_ODDS_PAIR, SNA
 import { Food } from "./Food.js"
 import { Vec } from "./utils/Vec.js"
 import { isCollision } from "./utils/utils.js"
-import { Controller } from "./Controller.js"
+import { controllerEvent } from "./events/controllerEvent.js"
 
 export const Snake = new class {
 	eyes = [
@@ -21,6 +21,19 @@ export const Snake = new class {
 	constructor() {
 		this.reset()
 		document.addEventListener('click', this.blinkOccasionally)
+		controllerEvent.subscribe(input => {
+			let prevDir = this.dir.clone()
+			const newDir = 
+				input.ArrowUp ? new Vec(0, -1)
+				: input.ArrowDown ? new Vec(0, 1)
+				: input.ArrowLeft ? new Vec(-1, 0)
+				: input.ArrowRight ? new Vec(1, 0)
+				: undefined
+			const isReversedDir = !!newDir && prevDir.mult(-1).equal(newDir)
+			if(!newDir || isReversedDir) return
+			this.dir = newDir
+		})
+		
 	}
 
 	reset() {
@@ -86,19 +99,6 @@ export const Snake = new class {
 		if (this.cell.x < 0) this.cell.x = CELL_COUNT-1
 	}
 
-	controlls() {
-		let prevDir = this.dir.clone()
-		const newDir = 
-			Controller.input.ArrowUp ? new Vec(0, -1)
-			: Controller.input.ArrowDown ? new Vec(0, 1)
-			: Controller.input.ArrowLeft ? new Vec(-1, 0)
-			: Controller.input.ArrowRight ? new Vec(1, 0)
-			: undefined
-		const isReversedDir = !!newDir && prevDir.mult(-1).equal(newDir)
-		if(!newDir || isReversedDir) return
-		this.dir = newDir
-	}
-
 	selfCollision() {
 		1 < this.length && this.history.forEach(entry => {
 			this.engine.isGameOver ||= isCollision(this.cell, entry)
@@ -107,7 +107,6 @@ export const Snake = new class {
 
 	update() {
 		if (this.delay--) return
-		this.controlls()
 		this.history[this.length - 1] = Vec.clone(this.cell)
 		for (let i = 0; i < this.length - 1; i++) {
 			this.history[i] = this.history[i + 1]
@@ -119,7 +118,6 @@ export const Snake = new class {
 		if (isCollision(this.cell, Food.cell)) {
 			Food.eaten()
 			this.length++
-			this.engine.score++
 		}
 		this.selfCollision()
 		

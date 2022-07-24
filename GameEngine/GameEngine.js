@@ -2,7 +2,7 @@ import { BOARD_SIZE, GRID_LINE_COLOR, CELL_COUNT, GAME_OVER_TEXT_COLOR, GAME_OVE
 import { Food } from "./Food.js"
 import { ParticlePool } from "./ParticlePool.js"
 import { Snake } from "./Snake.js"
-import { Controller } from "./Controller.js"
+import { scoreEvent } from "./events/scoreEvent.js"
 
 export const GameEngine = new class {
 	canvas = document.querySelector('canvas')
@@ -20,22 +20,7 @@ export const GameEngine = new class {
 
 	isGameOver
 	currentHue
-	maxScore = window.localStorage.getItem('maxScore') || undefined
 	requestID
-	sendScoreChange
-
-	onScoreChange(fn) {
-		this.sendScoreChange = fn
-	}
-	
-	#_score = 0
-	get score() {
-		return this.#_score
-	}
-	set score(n) {
-		this.#_score = n
-		this.sendScoreChange?.(this.#_score.toString().padStart(2, '0'))
-	}
 	
 	constructor() {
 		Snake.init(this)
@@ -98,11 +83,6 @@ export const GameEngine = new class {
 	}
 	
 	gameOver(skipDraw = false) {
-		if(!this.maxScore || this.maxScore < this.score) {
-			this.maxScore = this.score
-			window.localStorage.setItem('maxScore', this.maxScore)
-		}
-
 		if(skipDraw) return
 
 		this.ctx.fillStyle = GAME_OVER_TEXT_COLOR
@@ -112,9 +92,10 @@ export const GameEngine = new class {
 		this.ctx.font = GAME_OVER_TITLE_FONT
 		this.ctx.fillText('GAME OVER', this.width / 2, this.height / 2 - 40)
 
+		const score = scoreEvent()
 		this.ctx.font = GAME_OVER_SUBTITLE_FONT
-		this.ctx.fillText(`SCORE	 ${this.score}`, this.width / 2, this.height / 2 + 60)
-		this.ctx.fillText(`MAXSCORE	 ${this.maxScore}`, this.width / 2, this.height / 2 + 80)
+		this.ctx.fillText(`SCORE	 ${score.current}`, this.width / 2, this.height / 2 + 60)
+		this.ctx.fillText(`MAXSCORE	 ${score.max}`, this.width / 2, this.height / 2 + 80)
 	}
 
 	get BLINK_ODDS() {
@@ -147,13 +128,14 @@ export const GameEngine = new class {
 		clearTimeout(this.requestID)
 
 		this.isGameOver = false
-		this.score = '00'
+		scoreEvent.dispatch({ reset: true })
 
 		Snake.reset()
 		Food.spawn()
 		ParticlePool.reset()
-		Controller.reset()
 
 		this.gameLoop()
 	}
+
+	onScoreChange = scoreEvent.subscribe
 }()
