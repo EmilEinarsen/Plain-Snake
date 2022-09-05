@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<title>Snake</title>
 		<link rel="stylesheet" href="./style.css">
+		<link rel="stylesheet" href="./game.css">
 		<script type="module">
 			import { GameEngine } from "./GameEngine/GameEngine.js";
 			const replayButton = document.querySelector('#replay')
@@ -19,10 +20,10 @@
 			<h1>SNAKE</h1>
 
 			<div class="wrapper">
-				<button id="replay">
+				<button class="replay" id="replay">
 					RESTART
 				</button>
-				<canvas></canvas>
+				<canvas class="snake"></canvas>
 				<div class="score">
 					<h2>SCORE</h2>
 					<span id="score">00</span>

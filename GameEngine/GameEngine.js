@@ -19,7 +19,6 @@ export const GameEngine = new class {
 	})()
 
 	isGameOver
-	currentHue
 	requestID
 	
 	constructor() {

@@ -1,0 +1,98 @@
+@font-face {
+	font-family: "game";
+	src: url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;800&display=swap");
+}
+
+:root {
+	--snake-head-color: white;
+	--snake-eye-color: #424242;
+	--snake-eye-color-blink: #eee;
+	--snake-body-color: #eee;
+	--snake-shadow-color: #eeeeee30;
+}
+
+canvas.snake {
+	position: relative;
+	z-index: 3;
+	width: 600px;
+	height: 600px;
+	margin: -100px;
+	pointer-events: none;
+}
+
+.container {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	flex-flow: column-reverse wrap;
+	place-content: center;
+	user-select: none;
+}
+
+.container .wrapper {
+	position: relative;
+	display: block;
+	margin: 0 auto .5rem auto;
+}
+
+.container h1 {
+	width: 100%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 600;
+	color: inherit;
+	text-transform: uppercase;
+	letter-spacing: .5ch;
+}
+
+.container .score {
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translate(-50%, 0);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: .5rem;
+	flex-flow: column;
+	margin-block-end: .5rem;
+}
+
+.container .score h2 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 200;
+	writing-mode: vertical-rl;
+	text-orientation: upright;
+}
+
+.container .score span {
+	margin-block-start: 1rem;
+	font-size: 2rem;
+	font-weight: 800;
+}
+
+.container button.replay {
+	font-size: .75rem;
+	padding: .5rem 1rem;
+	background: #6e7888;
+	border: none;
+	color: #222738;
+	border-radius: 1e5px;
+	font-weight: 800;
+
+	position: absolute;
+	z-index: 2;
+	right: 100%;
+	top: 50%;
+	transform: translate(12.5%, -50%) rotate(270deg);
+	cursor: pointer;
+}
+.container button.replay:hover {
+	background: #4cffd7;
+}
+.container button.replay svg {
+	margin-block-end: .5rem;
+}

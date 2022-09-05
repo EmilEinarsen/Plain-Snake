@@ -7,6 +7,6 @@ const getInput = key => Object.fromEntries([
 	'ArrowRight',
 ].map(k => [k, key === k]))
 
-export const controllerEvent = createEvent(name, getInput())
+export const controllerEvent = createEvent('controller', getInput())
 
 document.addEventListener('keydown', e => controllerEvent.dispatch(getInput(e.key)), false)
